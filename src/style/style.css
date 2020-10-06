@@ -1,0 +1,23 @@
+.login {
+    width: 30%;
+    position: absolute;
+    left: 35%;
+    top: 20%
+}
+
+.membersTable {
+    width: 40%;
+    position: absolute;
+    left: 30%;
+    top: 30%
+}
+
+.tableHeadFont {
+    font-style: oblique;
+    font-weight: bold;
+}
+
+.loginLabelFont {
+    font-style: oblique;
+    font-size: large;
+}
