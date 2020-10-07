@@ -6,7 +6,7 @@ import * as serviceWorker from './serviceWorker';
 
 import 'bootstrap/dist/css/bootstrap.min.css';
 
-import style from './style/style.css'
+import './style/style.css'
 
 ReactDOM.render(
     <React.StrictMode>
