@@ -17,7 +17,7 @@ class Members extends React.Component {
             authorized: user ? user.authorized : false,
             raisedHand: user ? user.raisedHand : false,
             users: null,
-            error: {}
+            error: ''
         }
     }
 
