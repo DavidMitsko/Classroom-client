@@ -8,12 +8,12 @@ class Login extends React.Component {
         super(props);
         this.state = {
             username: '',
-            error: ''
+            error: {}
         };
     }
 
     componentWillMount() {
-        if(sessionStorage.getItem('user')) {
+        if(localStorage.getItem('user')) {
             history.replace('/member')
         }
     }
@@ -27,7 +27,7 @@ class Login extends React.Component {
 
         api.signIn(this.state)
             .then(response => {
-                sessionStorage.setItem("user", JSON.stringify(response.data))
+                localStorage.setItem("user", JSON.stringify(response.data))
 
                 history.replace("/members")
             })

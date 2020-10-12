@@ -10,14 +10,14 @@ class Members extends React.Component {
     constructor(props) {
         super(props);
 
-        let user = sessionStorage.getItem("user") ? JSON.parse(sessionStorage.getItem('user')) : null;
+        let user = localStorage.getItem("user") ? JSON.parse(localStorage.getItem('user')) : null;
         this.state = {
             username: user ? user.username : " ",
             userId: user ? user.id : null,
             authorized: user ? user.authorized : false,
             raisedHand: user ? user.raisedHand : false,
             users: null,
-            error: ''
+            error: {}
         }
     }
 
@@ -35,22 +35,12 @@ class Members extends React.Component {
             })
     }
 
-    componentDidMount() {
-        window.addEventListener('beforeunload', (event) => {
-            event.preventDefault()
-            api.signOut(this.state.userId)
-                .catch(err => {
-                    this.setState({error: err.response.data.message})
-                })
-        })
-    }
-
     onActionSubmit = (event) => {
         event.preventDefault();
 
         api.raiseHand(this.state.userId)
             .then(response => {
-                sessionStorage.setItem("user", JSON.stringify(response.data))
+                localStorage.setItem("user", JSON.stringify(response.data))
                 this.setState({raisedHand: response.data.raisedHand})
             })
             .catch(err => {
@@ -63,7 +53,7 @@ class Members extends React.Component {
 
         api.signOut(this.state.userId)
             .then(response => {
-                sessionStorage.removeItem("user")
+                localStorage.removeItem("user")
 
                 history.replace("/login")
             })
