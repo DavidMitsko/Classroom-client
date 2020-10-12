@@ -14,7 +14,7 @@ class Login extends React.Component {
 
     componentWillMount() {
         if(localStorage.getItem('user')) {
-            history.replace('/member')
+            history.replace('/members')
         }
     }
 
