@@ -27,7 +27,7 @@ class Members extends React.Component {
             history.replace('/login')
         }
 
-        api.getUsers()
+        api.getAuthorizedStudents()
             .then(response => {
                 this.setState({users: response.data})
             })
