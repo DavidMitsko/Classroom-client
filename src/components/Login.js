@@ -8,6 +8,8 @@ class Login extends React.Component {
         super(props);
         this.state = {
             username: '',
+            role: 'STUDENT',
+            email: '',
             error: ''
         };
     }
@@ -73,7 +75,9 @@ class Login extends React.Component {
         event.preventDefault();
 
         api.signIn({
-            username: this.state.username
+            username: this.state.username,
+            role: this.state.role,
+            email: this.state.email
         })
             .then(response => {
                 localStorage.setItem("user", JSON.stringify(response.data))
