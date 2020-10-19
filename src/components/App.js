@@ -4,7 +4,7 @@ import {history} from "../utils";
 import {Login} from "./Login";
 import {Members} from "./Members";
 import {Students} from "./Students";
-import {Log} from "./Log";
+import {Log} from "./StudentsLogs";
 
 export default() => (
     <Router history={history}>
