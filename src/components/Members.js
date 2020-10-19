@@ -1,10 +1,11 @@
 import React from 'react';
-import {Navbar, NavDropdown, Nav, Table, Alert} from 'react-bootstrap';
+import {Table, Alert} from 'react-bootstrap';
 import {history} from '../utils';
 import SockJsClient from 'react-stomp';
 import raisedHand from '../raisedHand.svg';
 import {api} from '../api/app';
 import {API_URL, SOCK_URL, TOPIC_URL} from "../constants";
+import {NavBar} from "./NavBar";
 
 class Members extends React.Component {
     constructor(props) {
@@ -35,50 +36,10 @@ class Members extends React.Component {
             })
     }
 
-    onActionSubmit = (event) => {
-        event.preventDefault();
-
-        api.raiseHand(this.state.userId)
-            .then(response => {
-                localStorage.setItem("user", JSON.stringify(response.data))
-                this.setState({raisedHand: response.data.raisedHand})
-            })
-            .catch(err => {
-                this.setState({error: err.response.data.message})
-            })
-    }
-
-    signOut = (event) => {
-        event.preventDefault();
-
-        api.signOut(this.state.userId)
-            .then(response => {
-                localStorage.removeItem("user")
-
-                history.replace("/login")
-            })
-            .catch(err => {
-                this.setState({error: err.response.data.message})
-            })
-    }
-
-
     render() {
         return (
             <div>
-                <Navbar bg="light" expand="lg">
-                    <Nav className="mr-auto">
-                        <NavDropdown title="Actions" id="basic-nav-dropdown">
-                            <NavDropdown.Item onClick={this.onActionSubmit}>Raise hand
-                                {this.state.raisedHand ? ' down' : ' up'}</NavDropdown.Item>
-                        </NavDropdown>
-                    </Nav>
-                    <Nav>
-                        <NavDropdown title={this.state.username} id="basic-nav-dropdown">
-                            <NavDropdown.Item onClick={this.signOut}>Log out</NavDropdown.Item>
-                        </NavDropdown>
-                    </Nav>
-                </Navbar>
+                <NavBar/>
 
                 <div className="membersTable">
                     {this.state.users &&
