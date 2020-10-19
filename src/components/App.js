@@ -4,7 +4,7 @@ import {history} from "../utils";
 import {Login} from "./Login";
 import {Members} from "./Members";
 import {Students} from "./Students";
-import {Log} from "./StudentsLogs";
+import {StudentsLogs} from "./StudentsLogs";
 
 export default() => (
     <Router history={history}>
@@ -21,7 +21,7 @@ export default() => (
             <Students/>
         </Route>
         <Route exact path='/log'>
-            <Log/>
+            <StudentsLogs/>
         </Route>
     </Router>
 )

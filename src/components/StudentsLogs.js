@@ -1,10 +1,10 @@
 import React from "react";
 import {api} from "../api/app"
-import {NavBar} from "./utils/NavBar";
+import {NavBar} from "./NavBar";
 import {Alert, Button, Table, ToggleButton, ToggleButtonGroup} from "react-bootstrap";
 import filter from "../filter.svg"
 
-class Log extends React.Component {
+class StudentsLogs extends React.Component {
     constructor(props) {
         super(props);
 
@@ -89,4 +89,4 @@ class Log extends React.Component {
     }
 }
 
-export {Log};
+export {StudentsLogs};
