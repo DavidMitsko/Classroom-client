@@ -89,6 +89,7 @@ class Login extends React.Component {
                 history.replace({MEMBERS})
             })
             .catch(err => {
+                this.setState({hidden: !this.state.hidden})
                 this.setState({error: err.response.data.message})
             })
     }
