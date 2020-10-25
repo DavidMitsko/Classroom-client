@@ -23,7 +23,7 @@ class Settings extends React.Component {
 
     componentWillMount() {
         if(this.state.role === "STUDENT") {
-            history.replace({MEMBERS})
+            history.replace(MEMBERS)
         }
 
         api.getReportInfo(this.state.userId)

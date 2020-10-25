@@ -21,7 +21,7 @@ class NavBar extends React.Component {
 
     componentWillMount() {
         if (!this.state.authorized) {
-            history.replace({LOGIN})
+            history.replace(LOGIN)
         }
     }
 
@@ -45,7 +45,7 @@ class NavBar extends React.Component {
             .then(() => {
                 localStorage.removeItem("user")
 
-                history.replace({LOGIN})
+                history.replace(LOGIN)
             })
             .catch(err => {
                 this.setState({error: err.response.data.message})

@@ -18,7 +18,7 @@ class Login extends React.Component {
 
     componentWillMount() {
         if (localStorage.getItem("user")) {
-            history.replace({MEMBERS})
+            history.replace(MEMBERS)
         }
     }
 
@@ -86,7 +86,7 @@ class Login extends React.Component {
                 this.setState({hidden: !this.state.hidden})
                 localStorage.setItem("user", JSON.stringify(response.data))
 
-                history.replace({MEMBERS})
+                history.replace(MEMBERS)
             })
             .catch(err => {
                 this.setState({hidden: !this.state.hidden})

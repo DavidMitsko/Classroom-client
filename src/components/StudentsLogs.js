@@ -25,7 +25,7 @@ class StudentsLogs extends React.Component {
 
     componentWillMount() {
         if(this.state.role === "STUDENT") {
-            history.replace({MEMBERS})
+            history.replace(MEMBERS)
         }
 
         api.getAllStudentsLogs(this.state.studentId, "")

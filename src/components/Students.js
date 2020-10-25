@@ -20,7 +20,7 @@ class Students extends React.Component {
 
     componentWillMount() {
         if(this.state.role === "STUDENT") {
-            history.replace({MEMBERS})
+            history.replace(MEMBERS)
         }
 
         api.getAllStudents()
