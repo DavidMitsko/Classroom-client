@@ -1,22 +1,24 @@
 import React from 'react';
-import {Form, Button, Alert, Tabs, Tab, OverlayTrigger, Tooltip, FormGroup} from "react-bootstrap";
+import {Form, Button, Alert, Tabs, Tab, OverlayTrigger, Tooltip, FormGroup, Spinner} from "react-bootstrap";
 import {api} from "../api/app"
 import {history} from "../utils";
+import {MEMBERS} from "../routes";
 
 class Login extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            username: '',
-            role: 'STUDENT',
-            email: '',
-            error: ''
+            username: "",
+            role: "STUDENT",
+            email: "",
+            error: "",
+            spinner: false
         };
     }
 
     componentWillMount() {
-        if(localStorage.getItem('user')) {
-            history.replace('/members')
+        if (localStorage.getItem("user")) {
+            history.replace({MEMBERS})
         }
     }
 
@@ -51,7 +53,7 @@ class Login extends React.Component {
     studentLogin = () => (
         <Form onSubmit={this.signIn}>
             {this.nameInput()}
-            {this.state.error && <Alert variant='danger'>{this.state.error}</Alert>}
+            {this.state.error && <Alert variant="danger">{this.state.error}</Alert>}
             <Button variant="primary" type="submit" block className="form-btn">
                 Login
             </Button>
@@ -64,7 +66,7 @@ class Login extends React.Component {
                 {this.nameInput()}
                 {this.emailInput()}
             </Form.Group>
-            {this.state.error && <Alert variant='danger'>{this.state.error}</Alert>}
+            {this.state.error && <Alert variant="danger">{this.state.error}</Alert>}
             <Button variant="primary" type="submit" block className="form-btn">
                 Login
             </Button>
@@ -73,6 +75,7 @@ class Login extends React.Component {
 
     signIn = (event) => {
         event.preventDefault();
+        this.setState({hidden: !this.state.hidden})
 
         api.signIn({
             username: this.state.username,
@@ -80,9 +83,10 @@ class Login extends React.Component {
             email: this.state.email
         })
             .then(response => {
+                this.setState({hidden: !this.state.hidden})
                 localStorage.setItem("user", JSON.stringify(response.data))
 
-                history.replace("/members")
+                history.replace({MEMBERS})
             })
             .catch(err => {
                 this.setState({error: err.response.data.message})
@@ -91,16 +95,21 @@ class Login extends React.Component {
 
     render() {
         return (
-            <div className="login">
-                <Tabs defaultActiveKey="STUDENT" id="controlled-tab-example"
-                      onSelect={eventKey => this.setState({role: eventKey})}>
-                    <Tab eventKey="STUDENT" title="Student">
-                        {this.studentLogin()}
-                    </Tab>
-                    <Tab eventKey="TEACHER" title="Teacher">
-                        {this.teacherLogin()}
-                    </Tab>
-                </Tabs>
+
+            <div>
+                <Spinner className="spinner" hidden={!this.state.hidden} animation="border" variant="primary"/>
+
+                <div className="login" hidden={this.state.hidden}>
+                    <Tabs defaultActiveKey="STUDENT" id="controlled-tab-example"
+                          onSelect={eventKey => this.setState({role: eventKey})}>
+                        <Tab eventKey="STUDENT" title="Student">
+                            {this.studentLogin()}
+                        </Tab>
+                        <Tab eventKey="TEACHER" title="Teacher">
+                            {this.teacherLogin()}
+                        </Tab>
+                    </Tabs>
+                </div>
             </div>
         )
     }
