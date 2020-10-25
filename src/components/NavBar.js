@@ -7,7 +7,7 @@ class NavBar extends React.Component {
     constructor(props) {
         super(props);
 
-        let user = JSON.parse(localStorage.getItem('user'));
+        let user = localStorage.getItem("user") ? JSON.parse(localStorage.getItem('user')) : null;
         this.state = {
             userId: user.id,
             username: user.username,
@@ -34,7 +34,7 @@ class NavBar extends React.Component {
         event.preventDefault();
 
         api.signOut(this.state.userId)
-            .then(response => {
+            .then(() => {
                 localStorage.removeItem("user")
 
                 history.replace("/login")
@@ -63,7 +63,7 @@ class NavBar extends React.Component {
                     </Nav>
                     <Nav>
                         <NavDropdown title={this.state.username} id="basic-nav-dropdown">
-                            {this.state.role === 'TEACHER' && <NavDropdown.Item>Settings</NavDropdown.Item>}
+                            {this.state.role === 'TEACHER' && <NavDropdown.Item href='/settings'>Settings</NavDropdown.Item>}
                             <NavDropdown.Item onClick={this.signOut}>Log out</NavDropdown.Item>
                         </NavDropdown>
                     </Nav>

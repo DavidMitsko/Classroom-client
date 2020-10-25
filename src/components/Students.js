@@ -25,7 +25,7 @@ class Students extends React.Component {
             })
     }
 
-    onClickButton = (event) => {
+    chooseStudent = (event) => {
         event.preventDefault();
         sessionStorage.setItem("studentId", event.target.value)
         history.replace("/log", event.target.value)
@@ -36,18 +36,16 @@ class Students extends React.Component {
             <div>
                 <NavBar/>
 
-                <div className="membersTable">
+                <div className="tables">
                     {this.state.students &&
                     <Table>
                         <h5 className="tableHeadFont">Students list</h5>
                         <tbody>
                         {this.state.students.map((students, index) =>
-
                             <tr key={index}>
-
                                 <td>
                                     <Button type="submit" variant="link" value={students.id}
-                                            onClick={this.onClickButton}>
+                                            onClick={this.chooseStudent}>
                                         {students.username}
                                     </Button>
                                 </td>

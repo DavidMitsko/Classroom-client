@@ -41,7 +41,7 @@ class Members extends React.Component {
             <div>
                 <NavBar/>
 
-                <div className="membersTable">
+                <div className="tables">
                     {this.state.users &&
                     <Table>
                         <h5 className="tableHeadFont">Class members</h5>

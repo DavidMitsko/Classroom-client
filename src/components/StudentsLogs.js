@@ -1,7 +1,7 @@
 import React from "react";
 import {api} from "../api/app"
 import {NavBar} from "./NavBar";
-import {Alert, Button, Table, ToggleButton, ToggleButtonGroup} from "react-bootstrap";
+import {Alert, Button, Table, Form} from "react-bootstrap";
 import filter from "../filter.svg"
 
 class StudentsLogs extends React.Component {
@@ -9,11 +9,10 @@ class StudentsLogs extends React.Component {
         super(props);
 
         this.state = {
-            studentId: sessionStorage.getItem("studentId"),
-            actions: null,
-            action: '',
-            startPeriod: null,
-            endPeriod: null,
+            studentId: sessionStorage.getItem("studentId") ? sessionStorage.getItem("studentId") : null,
+            actions: [],
+            startPeriod: '',
+            endPeriod: '',
             logs: null,
             error: '',
             hiddenField: true
@@ -21,8 +20,7 @@ class StudentsLogs extends React.Component {
     }
 
     componentWillMount() {
-        console.log(this.state.studentId)
-        api.getStudentsLogs(this.state.studentId)
+        api.getStudentsLogs(this.state.studentId, '')
             .then(response => {
                 this.setState({logs: response.data})
             })
@@ -31,17 +29,65 @@ class StudentsLogs extends React.Component {
             })
     }
 
-    but = (event) => {
+    hiddenButton = (event) => {
         event.preventDefault();
-        let temp = !(this.state.hiddenField)
-        this.setState({hiddenField : temp})
-        document.getElementById('filter').hidden = false;
+        this.setState({hiddenField: !(this.state.hiddenField)})
     }
 
-    handleChange = (value) => {
-        this.setState({actions: value})
-        console.log(value)
-        console.log(this.state.actions)
+    chooseAction = (event) => {
+        const {name, checked} = event.target;
+        this.setState({
+            actions: checked
+                ? [...this.state.actions, name]
+                : this.state.actions.filter(item => item !== name)
+        })
+    }
+
+    filterLogs = (event) => {
+        event.preventDefault();
+        const {endPeriod, startPeriod} = this.state
+        let time
+
+        if (endPeriod === '' || startPeriod === '') {
+            time = ''
+        } else {
+            time = this.state.startPeriod + ':' + this.state.endPeriod
+        }
+
+        if (this.state.actions.length) {
+            api.getStudentsLogs(this.state.actions.toString(), this.state.studentId, time)
+                .then(response => {
+                    this.setState({logs: response.data})
+                })
+                .catch(err => {
+                    this.setState({error: err.response.data.message})
+                })
+        } else {
+            api.getAllStudentsLogs(this.state.studentId, time)
+                .then(response => {
+                    this.setState({logs: response.data})
+                })
+                .catch(err => {
+                    this.setState({error: err.response.data.message})
+                })
+        }
+
+        this.setState({actions: [], endPeriod: '', startPeriod: ''})
+    }
+
+    pickStartPeriod = (event) => {
+        event.preventDefault()
+        console.log(event.target.value)
+        this.setState({startPeriod: event.target.value})
+        console.log(this.state.startPeriod)
+    }
+
+    pickEndPeriod = (event) => {
+        event.preventDefault()
+        console.log(event.target.value)
+        this.setState({endPeriod: event.target.value})
+        console.log(this.state.startPeriod)
+        console.log(this.state.endPeriod)
     }
 
     render() {
@@ -50,26 +96,55 @@ class StudentsLogs extends React.Component {
                 <NavBar/>
 
 
-                <div className="membersTable">
+                <div>
 
-                    <div className="filterIcon">
-                        <Button variant="light" onClick={this.but}>
-                            <img src={filter} height="20" width="20" alt={"filter"}/>
-                        </Button>
-                    </div>
-                    <div id="filter" hidden={this.state.hiddenField}>
+                    <div className="filter-section">
+                        <div className="d-flex align-items-end">
+                            <div className="d-flex">
 
-                        <ToggleButtonGroup type="checkbox" value={this.state.action} onChange={this.handleChange}>
-                            <ToggleButton value="LOG_IN">Log in</ToggleButton>
-                            <ToggleButton value="LOG_OUT">Log out</ToggleButton>
-                            <ToggleButton value="HAND_UP">Hand up</ToggleButton>
-                            <ToggleButton value="HAND_DOWN">Hand down</ToggleButton>
-                        </ToggleButtonGroup>
+                                <Form.Group>
+                                    <Form.Label>From</Form.Label>
+                                    <Form.Control type="date" value={this.state.startPeriod}
+                                                  onChange={this.pickStartPeriod}/>
+                                </Form.Group>
+                                <Form.Group className="ml-2">
+                                    <Form.Label>To</Form.Label>
+                                    <Form.Control type="date" value={this.state.endPeriod}
+                                                  onChange={this.pickEndPeriod}/>
+                                </Form.Group>
+                            </div>
+                            <Button variant="light" onClick={this.hiddenButton} className="filter-button">
+                                <img src={filter} height="20" width="20" alt={"filter"}/>
+                            </Button>
+                            <Button type="submit" onClick={this.filterLogs} className="filter-button">Search</Button>
+                        </div>
+                        <div id="filter" hidden={this.state.hiddenField}>
+                            <Form.Check inline name="SIGN_IN" label="Sign in"
+                                        checked={this.state.actions.indexOf("SIGN_IN") !== -1}
+                                        onChange={this.chooseAction}
+                                        type="checkbox"
+                                        id="SIGN_IN"/>
+                            <Form.Check inline name="SIGN_OUT" label="Sign out"
+                                        checked={this.state.actions.indexOf("SIGN_OUT") !== -1}
+                                        onChange={this.chooseAction}
+                                        type="checkbox"
+                                        id="SIGN_OUT"/>
+                            <Form.Check inline name="HAND_UP" label="Hand up"
+                                        checked={this.state.actions.indexOf("HAND_UP") !== -1}
+                                        onChange={this.chooseAction}
+                                        type="checkbox"
+                                        id="HAND_UP"/>
+                            <Form.Check inline name="HAND_DOWN" label="Hand down"
+                                        checked={this.state.actions.indexOf("HAND_DOWN") !== -1}
+                                        onChange={this.chooseAction}
+                                        type="checkbox" id="HAND_DOWN"/>
+
+                        </div>
                     </div>
 
 
                     {this.state.logs &&
-                    <Table>
+                    <Table className="tables">
                         <h5 className="tableHeadFont">Logs</h5>
                         <tbody>
                         {this.state.logs.map((logs, index) =>
