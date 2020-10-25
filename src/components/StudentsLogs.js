@@ -20,7 +20,7 @@ class StudentsLogs extends React.Component {
     }
 
     componentWillMount() {
-        api.getStudentsLogs(this.state.studentId, '')
+        api.getAllStudentsLogs(this.state.studentId, '')
             .then(response => {
                 this.setState({logs: response.data})
             })
