@@ -62,7 +62,7 @@ class NavBar extends React.Component {
                                 <NavDropdown.Item onClick={this.raiseHand}>Raise hand
                                     {this.state.raisedHand ? " down" : " up"}</NavDropdown.Item> :
 
-                                this.state.path === {MEMBERS} || this.state.path === {LOG} ?
+                                this.state.path === MEMBERS || this.state.path === LOG ?
                                     <NavDropdown.Item href={STUDENTS}>Students list</NavDropdown.Item> :
                                     <NavDropdown.Item href={MEMBERS}>Class members</NavDropdown.Item>
 

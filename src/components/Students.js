@@ -35,7 +35,7 @@ class Students extends React.Component {
     chooseStudent = (event) => {
         event.preventDefault();
         sessionStorage.setItem("studentId", event.target.value)
-        history.replace({LOG}, event.target.value)
+        history.replace(LOG)
     }
 
     render() {
