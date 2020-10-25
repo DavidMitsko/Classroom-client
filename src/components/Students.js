@@ -3,19 +3,26 @@ import {NavBar} from "./NavBar";
 import {api} from '../api/app';
 import {Alert, Button, Table} from "react-bootstrap";
 import {history} from "../utils";
+import {LOG, MEMBERS} from "../routes";
 
 
 class Students extends React.Component {
     constructor(props) {
         super(props);
 
+        let user = localStorage.getItem("user") ? JSON.parse(localStorage.getItem("user")) : null;
         this.state = {
+            role: user ? user.role : "",
             students: null,
             error: ''
         }
     }
 
     componentWillMount() {
+        if(this.state.role === "STUDENT") {
+            history.replace({MEMBERS})
+        }
+
         api.getAllStudents()
             .then(response => {
                 this.setState({students: response.data});
@@ -28,7 +35,7 @@ class Students extends React.Component {
     chooseStudent = (event) => {
         event.preventDefault();
         sessionStorage.setItem("studentId", event.target.value)
-        history.replace("/log", event.target.value)
+        history.replace({LOG}, event.target.value)
     }
 
     render() {
@@ -55,7 +62,7 @@ class Students extends React.Component {
                         </tbody>
                     </Table>
                     }
-                    {this.state.error && <Alert variant='danger'>{this.state.error}</Alert>}
+                    {this.state.error && <Alert variant="danger">{this.state.error}</Alert>}
                 </div>
             </div>
         )

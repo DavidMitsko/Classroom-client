@@ -2,18 +2,26 @@ import React from 'react';
 import {Nav, Navbar, NavDropdown} from "react-bootstrap";
 import {history} from "../utils"
 import {api} from "../api/app";
+import {LOGIN, SETTINGS, STUDENTS, MEMBERS, LOG} from "../routes";
 
 class NavBar extends React.Component {
     constructor(props) {
         super(props);
 
-        let user = localStorage.getItem("user") ? JSON.parse(localStorage.getItem('user')) : null;
+        let user = localStorage.getItem("user") ? JSON.parse(localStorage.getItem("user")) : null;
         this.state = {
-            userId: user.id,
-            username: user.username,
-            raisedHand: user.raisedHand,
-            role: user.role,
+            userId: user ? user.id : null,
+            username: user ? user.username : '',
+            authorized: user ? user.authorized : false,
+            raisedHand: user ? user.raisedHand : false,
+            role: user ? user.role : null,
             path: window.location.pathname
+        }
+    }
+
+    componentWillMount() {
+        if (!this.state.authorized) {
+            history.replace({LOGIN})
         }
     }
 
@@ -37,7 +45,7 @@ class NavBar extends React.Component {
             .then(() => {
                 localStorage.removeItem("user")
 
-                history.replace("/login")
+                history.replace({LOGIN})
             })
             .catch(err => {
                 this.setState({error: err.response.data.message})
@@ -50,20 +58,21 @@ class NavBar extends React.Component {
                 <Navbar bg="light" expand="lg">
                     <Nav className="mr-auto">
                         <NavDropdown title="Actions" id="basic-nav-dropdown">
-                            {this.state.role === 'STUDENT' ?
+                            {this.state.role === "STUDENT" ?
                                 <NavDropdown.Item onClick={this.raiseHand}>Raise hand
-                                    {this.state.raisedHand ? ' down' : ' up'}</NavDropdown.Item> :
+                                    {this.state.raisedHand ? " down" : " up"}</NavDropdown.Item> :
 
-                                this.state.path === '/members' || this.state.path === '/log' ?
-                                    <NavDropdown.Item href='/students'>Students list</NavDropdown.Item> :
-                                    <NavDropdown.Item href='/members'>Class members</NavDropdown.Item>
+                                this.state.path === {MEMBERS} || this.state.path === {LOG} ?
+                                    <NavDropdown.Item href={STUDENTS}>Students list</NavDropdown.Item> :
+                                    <NavDropdown.Item href={MEMBERS}>Class members</NavDropdown.Item>
 
                             }
                         </NavDropdown>
                     </Nav>
                     <Nav>
                         <NavDropdown title={this.state.username} id="basic-nav-dropdown">
-                            {this.state.role === 'TEACHER' && <NavDropdown.Item href='/settings'>Settings</NavDropdown.Item>}
+                            {this.state.role === "TEACHER" &&
+                            <NavDropdown.Item href={SETTINGS}>Settings</NavDropdown.Item>}
                             <NavDropdown.Item onClick={this.signOut}>Log out</NavDropdown.Item>
                         </NavDropdown>
                     </Nav>

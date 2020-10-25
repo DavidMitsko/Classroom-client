@@ -2,23 +2,30 @@ import React from "react";
 import {NavBar} from "./NavBar";
 import {Button, Form, FormGroup} from "react-bootstrap";
 import {api} from "../api/app"
+import {history} from "../utils";
+import {MEMBERS} from "../routes";
 
 class Settings extends React.Component {
     constructor(props) {
         super(props);
 
-        let user = localStorage.getItem("user") ? JSON.parse(localStorage.getItem('user')) : null;
+        let user = localStorage.getItem("user") ? JSON.parse(localStorage.getItem("user")) : null;
         this.state = {
-            userId: user.id,
+            userId: user ? user.id : null,
+            role: user ? user.role : "",
             report: false,
             currentReportStatus: false,
-            frequency: 'DAY',
-            email: '',
-            error: ''
+            frequency: "DAY",
+            email: "",
+            error: ""
         }
     }
 
     componentWillMount() {
+        if(this.state.role === "STUDENT") {
+            history.replace({MEMBERS})
+        }
+
         api.getReportInfo(this.state.userId)
             .then(response => {
                 this.setState({report: response.data.enable})

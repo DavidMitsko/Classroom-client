@@ -1,6 +1,5 @@
 import React from 'react';
-import {Table, Alert} from 'react-bootstrap';
-import {history} from '../utils';
+import {Alert, Table} from 'react-bootstrap';
 import SockJsClient from 'react-stomp';
 import raisedHand from '../raisedHand.svg';
 import {api} from '../api/app';
@@ -11,7 +10,7 @@ class Members extends React.Component {
     constructor(props) {
         super(props);
 
-        let user = localStorage.getItem("user") ? JSON.parse(localStorage.getItem('user')) : null;
+        let user = localStorage.getItem("user") ? JSON.parse(localStorage.getItem("user")) : null;
         this.state = {
             username: user ? user.username : " ",
             userId: user ? user.id : null,
@@ -23,10 +22,6 @@ class Members extends React.Component {
     }
 
     componentWillMount() {
-        if (!this.state.authorized) {
-            history.replace('/login')
-        }
-
         api.getAuthorizedStudents()
             .then(response => {
                 this.setState({users: response.data})
@@ -55,7 +50,7 @@ class Members extends React.Component {
                         </tbody>
                     </Table>
                     }
-                    {this.state.error && <Alert variant='danger'>{this.state.error}</Alert>}
+                    {this.state.error && <Alert variant="danger">{this.state.error}</Alert>}
                 </div>
 
                 <SockJsClient url={API_URL + SOCK_URL}

@@ -3,24 +3,32 @@ import {api} from "../api/app"
 import {NavBar} from "./NavBar";
 import {Alert, Button, Table, Form} from "react-bootstrap";
 import filter from "../filter.svg"
+import {history} from "../utils";
+import {MEMBERS} from "../routes";
 
 class StudentsLogs extends React.Component {
     constructor(props) {
         super(props);
 
+        let user = localStorage.getItem("user") ? JSON.parse(localStorage.getItem("user")) : null;
         this.state = {
             studentId: sessionStorage.getItem("studentId") ? sessionStorage.getItem("studentId") : null,
+            role: user ? user.role : "",
             actions: [],
-            startPeriod: '',
-            endPeriod: '',
+            startPeriod: "",
+            endPeriod: "",
             logs: null,
-            error: '',
+            error: "",
             hiddenField: true
         }
     }
 
     componentWillMount() {
-        api.getAllStudentsLogs(this.state.studentId, '')
+        if(this.state.role === "STUDENT") {
+            history.replace({MEMBERS})
+        }
+
+        api.getAllStudentsLogs(this.state.studentId, "")
             .then(response => {
                 this.setState({logs: response.data})
             })
@@ -48,10 +56,10 @@ class StudentsLogs extends React.Component {
         const {endPeriod, startPeriod} = this.state
         let time
 
-        if (endPeriod === '' || startPeriod === '') {
-            time = ''
+        if (endPeriod === "" || startPeriod === "") {
+            time = ""
         } else {
-            time = this.state.startPeriod + ':' + this.state.endPeriod
+            time = this.state.startPeriod + ":" + this.state.endPeriod
         }
 
         if (this.state.actions.length) {
@@ -72,7 +80,7 @@ class StudentsLogs extends React.Component {
                 })
         }
 
-        this.setState({actions: [], endPeriod: '', startPeriod: ''})
+        this.setState({actions: [], endPeriod: "", startPeriod: ""})
     }
 
     pickStartPeriod = (event) => {
@@ -95,9 +103,7 @@ class StudentsLogs extends React.Component {
             <div>
                 <NavBar/>
 
-
                 <div>
-
                     <div className="filter-section">
                         <div className="d-flex align-items-end">
                             <div className="d-flex">
@@ -157,7 +163,7 @@ class StudentsLogs extends React.Component {
                         </tbody>
                     </Table>
                     }
-                    {this.state.error && <Alert variant='danger'>{this.state.error}</Alert>}
+                    {this.state.error && <Alert variant="danger">{this.state.error}</Alert>}
                 </div>
             </div>
         )

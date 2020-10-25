@@ -6,25 +6,26 @@ import {Members} from "./Members";
 import {Students} from "./Students";
 import {StudentsLogs} from "./StudentsLogs";
 import {Settings} from "./Settings";
+import {LOGIN, LOG, MEMBERS, SETTINGS, STUDENTS} from "../routes";
 
 export default() => (
     <Router history={history}>
         <Route exact path='/'>
-           <Redirect to='/login'/>
+           <Redirect to={LOGIN}/>
         </Route>
-        <Route exact path='/login'>
+        <Route exact path={LOGIN}>
             <Login/>
         </Route>
-        <Route exact path='/members'>
+        <Route exact path={MEMBERS}>
             <Members/>
         </Route>
-        <Route exact path='/students'>
+        <Route exact path={STUDENTS}>
             <Students/>
         </Route>
-        <Route exact path='/log'>
+        <Route exact path={LOG}>
             <StudentsLogs/>
         </Route>
-        <Route exact path='/settings'>
+        <Route exact path={SETTINGS}>
             <Settings/>
         </Route>
     </Router>
