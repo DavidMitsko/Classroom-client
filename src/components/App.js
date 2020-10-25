@@ -5,6 +5,7 @@ import {Login} from "./Login";
 import {Members} from "./Members";
 import {Students} from "./Students";
 import {StudentsLogs} from "./StudentsLogs";
+import {Settings} from "./Settings";
 
 export default() => (
     <Router history={history}>
@@ -22,6 +23,9 @@ export default() => (
         </Route>
         <Route exact path='/log'>
             <StudentsLogs/>
+        </Route>
+        <Route exact path='/settings'>
+            <Settings/>
         </Route>
     </Router>
 )
