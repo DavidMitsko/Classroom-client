@@ -42,7 +42,7 @@ class Login extends React.Component {
             <Form.Label className="loginLabelFont">Your e-mail:</Form.Label>
             <OverlayTrigger placement="right" overlay={
                 <Tooltip id="tooltip">
-                    Email
+                    This field is optional. You can change your email at any time in the settings
                 </Tooltip>
             }>
                 <Form.Control type="email" value={this.state.email} onChange={this.emailInputForm}/>
